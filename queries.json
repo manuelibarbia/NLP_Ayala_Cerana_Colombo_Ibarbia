@@ -3,53 +3,89 @@
     "id": 1,
     "query": "historias de amor trágico y desamor en la vida real",
     "libros_relevantes": [
-      "Acá poné el título exacto de un libro de tu CSV",
-      "Y acá otro si corresponde"
+      "primer-amor-trad-natalia-dvorkina",
+      "los-amores-paralelos",
+      "primer-amor-high-dry"
     ]
   },
   {
     "id": 2,
     "query": "dramas familiares y secretos oscuros",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "madres-e-hijos-adam-haslett",
+      "crimen-y-castigo-ii",
+      "crimen-y-castigo-i"
+    ]
   },
   {
     "id": 3,
     "query": "relatos sobre la superación del dolor y la pérdida",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "la-muerte-de-ivan-ilich-trad-j-fernandez-valdes",
+      "amor-y-muerte-en-bali",
+      "la-muerte-de-vivek-oji"
+    ]
   },
   {
     "id": 4,
     "query": "conflictos de clases sociales y romances prohibidos",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "primer-amor-trad-natalia-dvorkina",
+      "los-amores-paralelos",
+      "primer-amor-high-dry"
+    ]
   },
   {
     "id": 5,
     "query": "historias ambientadas en épocas de guerra y sufrimiento",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "granada-1936-los-cuerpos-rotos",
+      "el-desdichado-amor-del-fuhrer",
+      "la-guerra-de-los-rose"
+    ]
   },
   {
     "id": 6,
     "query": "tragedias juveniles y decisiones difíciles",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "hamlet-ed-clasicos-a-medida",
+      "cronica-de-san-gabriel",
+      "caceria-de-ninos"
+    ]
   },
   {
     "id": 7,
     "query": "relatos de culpa, redención y juicios morales",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "crimen-y-castigo-ii",
+      "crimen-y-castigo-i",
+      "justicia-2"
+    ]
   },
   {
     "id": 8,
     "query": "vínculos familiares rotos y reconciliación",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "eran-hermanas",
+      "madres-e-hijos-adam-haslett",
+      "la-familia-del-doctor-pedraza"
+    ]
   },
   {
     "id": 9,
     "query": "historias de profunda melancolía y soledad",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "solas-en-el-silencio",
+      "al-margen-del-alfabeto",
+      "a-solas-conmigo"
+    ]
   },
   {
     "id": 10,
     "query": "lucha contra la enfermedad y la adversidad extrema",
-    "libros_relevantes": []
+    "libros_relevantes": [
+      "las-uvas-de-la-ira-colec-reno",
+      "el-frio-llama-mi-nombre"
+    ]
   }
 ]
