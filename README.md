@@ -78,6 +78,7 @@ python -m jupyter lab notebooks/TP2_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
 El notebook carga `data/libros.csv`, construye el texto con el título y la sinopsis, y aplica limpieza, tokenización y eliminación de stopwords.
+La entrega se limita al archivo CSV; no se descargan libros ni se insertan registros en una base de datos externa.
 
 ## Estructura del repositorio
 
@@ -88,6 +89,9 @@ El notebook carga `data/libros.csv`, construye el texto con el título y la sino
 │   └── scraper.py            # Código fuente de la extracción
 ├── data/
 │   └── libros.csv            # Dataset final
+├── notebooks/
+│   └── TP2_ayala_cerana_colombo_ibarbia.ipynb # Procesamiento de texto
+├── queries.json              # Consultas de evaluación
 └── docs/
     └── diseno_extraccion.md  # Análisis previo y selectores
 ```
