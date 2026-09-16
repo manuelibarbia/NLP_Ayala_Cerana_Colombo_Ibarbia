@@ -5,6 +5,7 @@ import pandas as pd
 from datetime import date
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from urllib.parse import urljoin, urlparse
 
 # --- CONFIGURACIÓN DE RUTAS ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,6 +15,36 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 URL_CATEGORIA = "https://ww3.lectulandia.co/genero/drama/"
 URL_BASE = "https://ww3.lectulandia.co"
 MAX_LIBROS = 150
+CATEGORIA = "Drama"
+
+
+def limpiar_texto(valor):
+    """Normaliza espacios y representa los valores ausentes como texto vacío."""
+    if valor is None:
+        return ""
+    return " ".join(str(valor).split())
+
+
+def url_libro_valida(url):
+    """Comprueba que la URL sea HTTP(S) y apunte a una ficha de libro."""
+    parsed = urlparse(url)
+    return (
+        parsed.scheme in {"http", "https"}
+        and bool(parsed.netloc)
+        and parsed.path.startswith("/book/")
+    )
+
+
+def validar_libro(libro):
+    """Devuelve un registro limpio si tiene los campos mínimos requeridos."""
+    registro = {campo: limpiar_texto(libro.get(campo, "")) for campo in libro}
+    if not registro["titulo"]:
+        return None
+    if not url_libro_valida(registro["url_libro"]):
+        return None
+    if not registro["categoria_origen"] or not registro["fecha_extraccion"]:
+        return None
+    return registro
 
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -30,6 +61,7 @@ def main():
         # (Consigna: Recorrer la categoría para obtener los enlaces)
         # =========================================================
         enlaces_libros = []
+        enlaces_vistos = set()
         num_pagina = 1
 
         while len(enlaces_libros) < MAX_LIBROS:
@@ -47,11 +79,14 @@ def main():
                 for tarjeta in tarjetas:
                     if len(enlaces_libros) < MAX_LIBROS:
                         link_relativo = tarjeta.get('href')
-                        link_completo = link_relativo if link_relativo.startswith('http') else f"{URL_BASE}{link_relativo}"
+                        if not link_relativo:
+                            continue
+                        link_completo = urljoin(URL_BASE, link_relativo)
                         
                         # Consigna: Evitar libros duplicados
-                        if link_completo not in enlaces_libros:
+                        if link_completo not in enlaces_vistos:
                             enlaces_libros.append(link_completo)
+                            enlaces_vistos.add(link_completo)
             except Exception as e:
                 print(f"⚠️ Error en la página {num_pagina}: {e}")
                 break
@@ -66,6 +101,7 @@ def main():
         # =========================================================
         print("Iniciando extracción de fichas individuales...")
         datos_libros = []
+        urls_registradas = set()
         
         for i, url in enumerate(enlaces_libros):
             print(f"[{i+1}/{MAX_LIBROS}] Extrayendo: {url}")
@@ -113,18 +149,27 @@ def main():
                     sinopsis = ""
                 
                 # Agregamos los datos al diccionario
-                libro = {
+                libro_sin_validar = {
                     "titulo": titulo,
                     "autores": autores,
                     "generos": generos,
                     "serie": serie,
                     "sinopsis": sinopsis,
                     "url_libro": url,
-                    "categoria_origen": "Drama",
+                    "categoria_origen": CATEGORIA,
                     "fecha_extraccion": fecha_hoy
                 }
-                
+
+                libro = validar_libro(libro_sin_validar)
+                if libro is None:
+                    print(f"Registro descartado por falta de datos válidos: {url}")
+                    continue
+                if libro["url_libro"] in urls_registradas:
+                    print(f"Registro duplicado descartado: {url}")
+                    continue
+
                 datos_libros.append(libro)
+                urls_registradas.add(libro["url_libro"])
                 
             except Exception as e:
                 # Consigna: Control de errores para que la ejecución no se detenga
