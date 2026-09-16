@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "query": "historias de amor trágico y desamor en la vida real",
+    "libros_relevantes": [
+      "Acá poné el título exacto de un libro de tu CSV",
+      "Y acá otro si corresponde"
+    ]
+  },
+  {
+    "id": 2,
+    "query": "dramas familiares y secretos oscuros",
+    "libros_relevantes": []
+  },
+  {
+    "id": 3,
+    "query": "relatos sobre la superación del dolor y la pérdida",
+    "libros_relevantes": []
+  },
+  {
+    "id": 4,
+    "query": "conflictos de clases sociales y romances prohibidos",
+    "libros_relevantes": []
+  },
+  {
+    "id": 5,
+    "query": "historias ambientadas en épocas de guerra y sufrimiento",
+    "libros_relevantes": []
+  },
+  {
+    "id": 6,
+    "query": "tragedias juveniles y decisiones difíciles",
+    "libros_relevantes": []
+  },
+  {
+    "id": 7,
+    "query": "relatos de culpa, redención y juicios morales",
+    "libros_relevantes": []
+  },
+  {
+    "id": 8,
+    "query": "vínculos familiares rotos y reconciliación",
+    "libros_relevantes": []
+  },
+  {
+    "id": 9,
+    "query": "historias de profunda melancolía y soledad",
+    "libros_relevantes": []
+  },
+  {
+    "id": 10,
+    "query": "lucha contra la enfermedad y la adversidad extrema",
+    "libros_relevantes": []
+  }
+]
