@@ -89,6 +89,36 @@ def guardar_registros(ruta_csv, registros, modo="a"):
         encoding="utf-8",
     )
 
+
+def validar_dataset(registros):
+    """Ejecuta los controles mínimos antes de dar por terminada la extracción."""
+    df = pd.DataFrame(registros, columns=COLUMNAS).fillna("")
+    urls = df["url_libro"]
+    titulos = df["titulo"].astype(str).str.strip()
+    sinopsis = df["sinopsis"].astype(str).str.strip()
+
+    cantidad_sinopsis = int((sinopsis != "").sum())
+    cantidad_duplicados = int(urls.duplicated().sum())
+    cantidad_titulos_vacios = int((titulos == "").sum())
+    cantidad_urls_invalidas = int((~urls.map(url_libro_valida)).sum())
+
+    print("\n--- Validación final ---")
+    print(f"Registros: {len(df)}/{MAX_LIBROS}")
+    print(f"Títulos vacíos: {cantidad_titulos_vacios}")
+    print(f"URLs inválidas: {cantidad_urls_invalidas}")
+    print(f"URLs duplicadas: {cantidad_duplicados}")
+    print(f"Registros con sinopsis: {cantidad_sinopsis}/{len(df)}")
+
+    if len(df) != MAX_LIBROS:
+        raise RuntimeError(
+            f"La extracción terminó con {len(df)} registros; se requieren {MAX_LIBROS}."
+        )
+    if cantidad_titulos_vacios or cantidad_urls_invalidas or cantidad_duplicados:
+        raise RuntimeError("El dataset no supera los controles de títulos, URLs o duplicados.")
+    if cantidad_sinopsis <= len(df) / 2:
+        raise RuntimeError("Menos de la mitad de los registros tiene sinopsis.")
+
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     print("Iniciando extracción - Categoría Drama")
@@ -229,6 +259,7 @@ def main():
         # (Consigna: Generar el archivo libros.csv)
         # =========================================================
         print(f"Extracción finalizada. Dataset guardado en: {RUTA_CSV}")
+        validar_dataset(datos_libros)
 
         browser.close()
 
