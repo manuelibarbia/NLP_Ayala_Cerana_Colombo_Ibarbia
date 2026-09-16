@@ -28,10 +28,10 @@ El dataset final se guardará en `libros.csv` y contendrá los siguientes campos
 
 | Dato | Tipo de página | Etiqueta HTML | Selector propuesto |
 | :--- | :--- | :--- | :--- |
-| **Título** | Ficha individual | `h1` | `#title` |
+| **Título** | Ficha individual | `h1` | `main h1` |
 | **Autores** | Ficha individual | `a` | `#autor a` |
 | **Géneros** | Ficha individual | `a` | `#genero a` |
-| **Sinopsis** | Ficha individual | `p` | `#sinopsis p` |
+| **Sinopsis** | Ficha individual | `div` | `#sinopsis` |
 
 Los selectores definitivos serán validados exhaustivamente durante la fase de desarrollo para evitar falsos positivos.
 

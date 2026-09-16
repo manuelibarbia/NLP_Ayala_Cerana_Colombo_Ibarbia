@@ -79,7 +79,7 @@ def main():
                 
                 # Consigna: Manejo de errores en la extracción (try/except por campo)
                 try:
-                    titulo = soup.select_one('h1#title').text.strip()
+                    titulo = soup.select_one('main h1').get_text(" ", strip=True)
                 except Exception:
                     titulo = ""
                     
@@ -106,8 +106,7 @@ def main():
                         # Limpieza de saltos de línea HTML
                         for br in sinopsis_container.find_all("br"):
                             br.replace_with(" ")
-                        parrafos = sinopsis_container.find_all('p')
-                        sinopsis = " ".join([p.text.strip() for p in parrafos]).strip()
+                        sinopsis = sinopsis_container.get_text(" ", strip=True)
                     else:
                         sinopsis = ""
                 except Exception:
