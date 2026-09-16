@@ -10,17 +10,28 @@ from urllib.parse import urljoin, urlparse
 # --- CONFIGURACIÓN DE RUTAS ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
+RUTA_CSV = os.path.join(DATA_DIR, "libros.csv")
 
 # --- CONSTANTES ---
 URL_CATEGORIA = "https://ww3.lectulandia.co/genero/drama/"
 URL_BASE = "https://ww3.lectulandia.co"
 MAX_LIBROS = 150
 CATEGORIA = "Drama"
+COLUMNAS = [
+    "titulo",
+    "autores",
+    "generos",
+    "serie",
+    "sinopsis",
+    "url_libro",
+    "categoria_origen",
+    "fecha_extraccion",
+]
 
 
 def limpiar_texto(valor):
     """Normaliza espacios y representa los valores ausentes como texto vacío."""
-    if valor is None:
+    if valor is None or pd.isna(valor):
         return ""
     return " ".join(str(valor).split())
 
@@ -45,6 +56,38 @@ def validar_libro(libro):
     if not registro["categoria_origen"] or not registro["fecha_extraccion"]:
         return None
     return registro
+
+
+def cargar_registros_validos(ruta_csv):
+    """Recupera registros válidos para poder continuar una extracción interrumpida."""
+    if not os.path.exists(ruta_csv):
+        return []
+
+    try:
+        anteriores = pd.read_csv(ruta_csv, dtype=str).fillna("")
+    except Exception as e:
+        print(f"No se pudo leer el CSV existente; se comenzará uno nuevo: {e}")
+        return []
+
+    registros = []
+    urls_vistas = set()
+    for fila in anteriores.to_dict(orient="records"):
+        libro = validar_libro(fila)
+        if libro is not None and libro["url_libro"] not in urls_vistas:
+            registros.append(libro)
+            urls_vistas.add(libro["url_libro"])
+    return registros
+
+
+def guardar_registros(ruta_csv, registros, modo="a"):
+    """Guarda registros manteniendo un encabezado único y un esquema estable."""
+    pd.DataFrame(registros, columns=COLUMNAS).to_csv(
+        ruta_csv,
+        mode=modo,
+        header=modo == "w",
+        index=False,
+        encoding="utf-8",
+    )
 
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -100,8 +143,11 @@ def main():
         # (Consignas: Uso de BeautifulSoup y Manejo de Errores)
         # =========================================================
         print("Iniciando extracción de fichas individuales...")
-        datos_libros = []
-        urls_registradas = set()
+        datos_libros = cargar_registros_validos(RUTA_CSV)
+        urls_registradas = {libro["url_libro"] for libro in datos_libros}
+        guardar_registros(RUTA_CSV, datos_libros, modo="w")
+        if datos_libros:
+            print(f"Se conservaron {len(datos_libros)} registros válidos del CSV existente.")
         
         for i, url in enumerate(enlaces_libros):
             print(f"[{i+1}/{MAX_LIBROS}] Extrayendo: {url}")
@@ -170,6 +216,7 @@ def main():
 
                 datos_libros.append(libro)
                 urls_registradas.add(libro["url_libro"])
+                guardar_registros(RUTA_CSV, [libro])
                 
             except Exception as e:
                 # Consigna: Control de errores para que la ejecución no se detenga
@@ -181,13 +228,7 @@ def main():
         # PASO 3: Guardado de resultados
         # (Consigna: Generar el archivo libros.csv)
         # =========================================================
-        print("Guardando datos en libros.csv...")
-        
-        ruta_csv = os.path.join(DATA_DIR, "libros.csv")
-        df = pd.DataFrame(datos_libros)
-        df.to_csv(ruta_csv, index=False, encoding='utf-8')
-        
-        print(f"Extracción finalizada Dataset guardado en: {ruta_csv}")
+        print(f"Extracción finalizada. Dataset guardado en: {RUTA_CSV}")
 
         browser.close()
 
