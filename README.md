@@ -6,14 +6,14 @@
 * Colombo, Tomás
 * Ibarbia, Manuel
 
-## Categoría selected
+## Categoría seleccionada
 
 - **Categoría:** Drama
 - **URL:** https://ww3.lectulandia.co/genero/drama/
 
 ## Cantidad de libros extraídos
 
-**150 libros** únicos (filtrados y sin duplicados).
+**150 libros** únicos, filtrados y sin duplicados.
 
 ## Modelo de datos
 
@@ -48,9 +48,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. Instalar el navegador para Playwright (Paso obligatorio para que el scraper funcione):
+3. Instalar el navegador Chromium para Playwright:
 ```bash
-playwright install chromium
+python -m playwright install chromium
 ```
 
 ## Ejecución
@@ -65,7 +65,19 @@ python src/scraper.py
 El script fue diseñado con una arquitectura robusta para evitar pérdidas de información y bloqueos:
 - **Descubrimiento primero:** El script recorre primero la paginación de la categoría Drama para recolectar las 150 URLs.
 - **Navegación controlada:** Utiliza Playwright (en modo *headless*) para visitar cada ficha individual, incorporando pausas aleatorias para no saturar el servidor de origen.
-- **Tolerancia a fallos:** Se utilizan bloques `try/except` para los campos (como la "Serie") que pueden no estar presentes en todos los libros, evitando que el programa se detenga.
+- **Tolerancia a fallos:** Un error en una ficha se informa y no detiene las demás.
+- **Guardado incremental:** Cada registro válido se agrega al CSV inmediatamente.
+- **Validación final:** Se comprueban los 150 registros, títulos, URLs, duplicados y sinopsis.
+
+### Procesamiento del texto
+
+Para abrir el notebook del procesamiento posterior:
+
+```bash
+python -m jupyter lab notebooks/TP2_ayala_cerana_colombo_ibarbia.ipynb
+```
+
+El notebook carga `data/libros.csv`, construye el texto con el título y la sinopsis, y aplica limpieza, tokenización y eliminación de stopwords.
 
 ## Estructura del repositorio
 
