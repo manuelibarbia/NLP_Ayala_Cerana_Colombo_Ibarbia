@@ -18,7 +18,7 @@ Preparar el catálogo del TP3 siguiendo el Paso 1 del enunciado y dejar evidenci
 ## Fuera de alcance
 
 - Implementar el Paso 2 o pasos posteriores del TP3.
-- Cambiar los datos fuente de la carpeta `TP3`, incluirlos en Git o modificar notebooks de TP1 y TP2.
+- Modificar el contenido de los datos fuente de TP3 o cambiar notebooks de TP1 y TP2; se versionan copias sin modificar de los insumos necesarios para ejecutar TP3.
 - Quitar enlaces, puntuación, caracteres invisibles u otros elementos de las sinopsis; pueden ser evidencia para el Paso 2.
 - Eliminar libros por puntajes aproximados sin revisión y aprobación humana.
 

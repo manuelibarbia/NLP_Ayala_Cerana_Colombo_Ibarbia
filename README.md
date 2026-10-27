@@ -1,55 +1,109 @@
 # Trabajo Práctico de Procesamiento del Lenguaje Natural
 
-## TP2 — Embeddings y búsqueda semántica
+Repositorio del grupo para los trabajos prácticos de Procesamiento del Lenguaje Natural. Los notebooks y sus datos de entrada están organizados para ejecutarse después de clonar el repositorio.
 
-**Integrantes:** Juan Manuel Ayala, Franco Cerana, Tomás Colombo y Manuel Ibarbia
+## Estructura
 
-**Corpus:** 150 sinopsis de libros de la categoría Drama de Lectulandia.
-
-El trabajo compara embeddings de palabras y de oraciones para recuperar libros a partir de consultas en lenguaje natural. También evalúa los modelos con relevancias definidas por el grupo y explora Doc2Vec.
-
-## Implementación
-
-- El notebook conserva `texto_crudo` y crea `texto_limpio` para los modelos de palabras.
-- Entrena Word2Vec Skip-gram y lo compara con los vectores preentrenados `SBW-vectors-300-min5`.
-- Construye vectores de documento como promedio normalizado y calcula su cobertura.
-- Genera embeddings con `distiluse-base-multilingual-cased-v1` e informa dimensión, límite de tokens y truncamiento.
-- Compara rankings para tres consultas, distribuciones de similitud entre pares aleatorios y proyecciones PCA por género.
-- Calcula Precision@3 para TF-IDF, Word2Vec promedio, SBW, SBERT y Doc2Vec, junto con el valor esperado al elegir al azar.
-- Entrena Doc2Vec y compara su recuperación con el promedio Word2Vec.
-
-El corpus es pequeño y las sinopsis son promocionales. La limpieza puede eliminar negaciones, los vectores promedio pierden orden y contexto, y SBERT trunca documentos que superan su límite de tokens. Los resultados deben interpretarse como evidencia para este corpus y estas consultas.
-
-## Entregables
-
-- `notebooks/TP2_ayala_cerana_colombo_ibarbia.ipynb`: notebook ejecutado con salidas visibles.
-- `queries.json`: diez consultas con identificadores de libros relevantes.
-- `informe.pdf`: síntesis de hasta tres páginas con resultados, limitaciones, un caso de fallo y declaración de uso de asistentes de IA.
-
-## Instalación y ejecución
-
-Se requiere Python 3.10 o superior. Desde la raíz del repositorio:
-
-```bash
-python -m venv venv
+```text
+.
+├── data/
+│   ├── catalogo_tp3.jsonl
+│   ├── ejemplo_preferencias.csv
+│   ├── ejemplo_sospechosos.csv
+│   ├── libros.csv
+│   └── muestra_etiquetada.csv
+├── docs/
+│   ├── TP3/
+│   │   ├── TP3_Recomendador_personalizado_de_libros.docx
+│   │   └── TP3_Recomendador_personalizado_de_libros.pdf
+│   ├── diseno_extraccion.md
+│   └── superpowers/
+│       ├── plans/
+│       └── specs/
+├── notebooks/
+│   ├── TP1_ayala_cerana_colombo_ibarbia.ipynb
+│   ├── TP2_ayala_cerana_colombo_ibarbia.ipynb
+│   └── TP3_ayala_cerana_colombo_ibarbia.ipynb
+├── src/
+│   └── scraper.py
+├── documentacion.md
+├── informe.pdf
+├── queries.json
+├── README.md
+└── requirements.txt
 ```
 
-Activar el entorno virtual e instalar las dependencias:
+`data/modelos/` se crea durante el TP2 para los vectores descargados. Está excluida de Git por el tamaño de esos archivos.
 
-```bash
-# Windows
-venv\Scripts\activate
+## Requisitos e instalación
 
-# Linux o macOS
-source venv/bin/activate
+- Python 3.10 o superior.
+- Git para clonar el repositorio.
+- Conexión a Internet durante la primera ejecución del TP1 y TP2 para descargar los recursos de NLTK y los modelos que usan esos notebooks.
 
-pip install -r requirements.txt
+Desde la raíz del repositorio, crea y activa un entorno virtual:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 ```
 
-Abrir el notebook:
+En Linux o macOS:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+Instala las dependencias compartidas por los tres trabajos:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+`requirements.txt` es la lista completa y compartida: incluye JupyterLab, pandas, NumPy, NLTK, Gensim, scikit-learn, sentence-transformers, matplotlib, gdown, python-Levenshtein, Playwright y Beautiful Soup.
+
+Dependencias principales por trabajo (todas se instalan con el mismo `requirements.txt`):
+
+| Trabajo | Requerimientos principales |
+| --- | --- |
+| TP1 | pandas, NLTK, Gensim, sentence-transformers y scikit-learn |
+| TP2 | pandas, NumPy, NLTK, Gensim, sentence-transformers, scikit-learn, matplotlib y gdown |
+| TP3, Paso 1 | pandas y python-Levenshtein |
+| `src/scraper.py` | Playwright y Beautiful Soup |
+
+## Ejecutar los trabajos prácticos
+
+Ejecuta estos comandos desde la raíz del repositorio. JupyterLab abrirá el notebook; ejecuta sus celdas en orden.
+
+### TP1 — Corpus y TF-IDF
+
+```bash
+python -m jupyter lab notebooks/TP1_ayala_cerana_colombo_ibarbia.ipynb
+```
+
+Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga `punkt`, `punkt_tab` y `stopwords` de NLTK, además del modelo SBERT `paraphrase-multilingual-MiniLM-L12-v2`.
+
+### TP2 — Embeddings y búsqueda semántica
 
 ```bash
 python -m jupyter lab notebooks/TP2_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La primera ejecución descarga recursos de NLTK y el modelo SBW, que se guarda en `data/modelos/` y no se incluye en Git por su tamaño.
+Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recursos de NLTK, el modelo SBW y el modelo SBERT. El archivo SBW se guarda en `data/modelos/` y no se versiona.
+
+### TP3 — Recomendador personalizado de libros
+
+```bash
+python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
+```
+
+La versión incluida implementa el Paso 1 y lee `data/catalogo_tp3.jsonl`. También están versionados `data/muestra_etiquetada.csv`, `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. El enunciado está en `docs/TP3/`.
+
+## Entregables existentes
+
+- `notebooks/TP1_ayala_cerana_colombo_ibarbia.ipynb`
+- `notebooks/TP2_ayala_cerana_colombo_ibarbia.ipynb`
+- `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb`
+- `queries.json` e `informe.pdf`
