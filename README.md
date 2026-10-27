@@ -70,7 +70,7 @@ Dependencias principales por trabajo (todas se instalan con el mismo `requiremen
 | --- | --- |
 | TP1 | pandas, NLTK, Gensim, sentence-transformers y scikit-learn |
 | TP2 | pandas, NumPy, NLTK, Gensim, sentence-transformers, scikit-learn, matplotlib y gdown |
-| TP3, Paso 1 y Paso 2.1 | pandas, python-Levenshtein y scikit-learn |
+| TP3, Paso 1, Paso 2.1 y Paso 2.2 | pandas, python-Levenshtein y scikit-learn |
 | `src/scraper.py` | Playwright y Beautiful Soup |
 
 ## Ejecutar los trabajos prácticos
@@ -99,7 +99,7 @@ Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recurs
 python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La versión incluida implementa el Paso 1 y el apartado 2.1 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.2 a 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
+La versión incluida implementa el Paso 1 y los apartados 2.1 y 2.2 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.3 a 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
 
 ## Entregables existentes
 
