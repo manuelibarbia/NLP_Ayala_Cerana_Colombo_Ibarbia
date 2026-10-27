@@ -24,11 +24,11 @@
 - En la corrida verificada se encontraron 1 sinopsis vacía, 0 slugs repetidos y 98 registros adicionales con sinopsis idéntica; quedaron 8.648 registros. <!-- Última modificación: 2026-10-27 -->
 - Para revisión aproximada se comparan libros que comparten al menos un autor identificable; se excluyen las etiquetas genéricas `Varios Autores` y `Anónimo`. <!-- Última modificación: 2026-10-27 -->
 - Levenshtein normalizado del título debe ser al menos 0,80 y Jaccard de palabras de la sinopsis al menos 0,75 para mostrar un par candidato. <!-- Última modificación: 2026-10-27 -->
-- Los 66 pares resultantes son sugerencias para revisión manual; se aprobaron únicamente las fusiones de los candidatos 1, 8, 11 y 31. <!-- Última modificación: 2026-10-27 -->
+- Los 66 pares resultantes son sugerencias para revisión manual; se aprobaron las fusiones de los candidatos 1, 7, 8, 11 y 31. <!-- Última modificación: 2026-10-27 -->
 - En cada fusión se conserva la primera ficha del catálogo y se elimina la segunda; la tabla del notebook muestra títulos, autores, puntajes y motivos. <!-- Última modificación: 2026-10-27 -->
-- El candidato 7 se mantiene separado porque su título especifica Granada; comparte autor y palabras en la sinopsis (Jaccard = 1,00), aunque difieren algunas mayúsculas que la limpieza exacta conserva. <!-- Última modificación: 2026-10-27 -->
+- El candidato 7 se fusiona: comparte autor y Jaccard de sinopsis 1,00, es decir, el mismo conjunto de palabras tras convertirlas a minúsculas; se conserva la primera ficha del catálogo aunque la otra especifique Granada. <!-- Última modificación: 2026-10-27 -->
 - El notebook presenta además dos pares separados por representar volúmenes o contenidos distintos y muestra cinco filas de ejemplo del catálogo final. <!-- Última modificación: 2026-10-27 -->
-- En la corrida final se quitaron 1 sinopsis vacía, 0 slugs duplicados, 98 sinopsis exactas repetidas y 4 fichas por fusión aprobada; quedaron 8.644 libros. <!-- Última modificación: 2026-10-27 -->
+- En la corrida final se quitaron 1 sinopsis vacía, 0 slugs duplicados, 98 sinopsis exactas repetidas y 5 fichas por fusión aprobada; quedaron 8.643 libros. <!-- Última modificación: 2026-10-27 -->
 ## Operación y despliegue <!-- Última modificación: 2026-10-27 -->
 - Dependencias: instalar las incluidas en `requirements.txt`, entre ellas `python-Levenshtein`, y abrir el notebook con Jupyter. <!-- Última modificación: 2026-10-27 -->
 - Persistencia: el Paso 1 muestra los resultados dentro del notebook y no escribe cambios en el archivo de entrada. <!-- Última modificación: 2026-10-27 -->
