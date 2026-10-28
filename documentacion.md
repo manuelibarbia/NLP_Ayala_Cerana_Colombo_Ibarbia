@@ -1,7 +1,7 @@
 # Documentación del proyecto <!-- Última modificación: 2026-10-27 -->
 <!-- Última modificación: 2026-10-27 -->
 ## Alcance de esta entrega <!-- Última modificación: 2026-10-27 -->
-- Se documentan el Paso 1 y los apartados 2.1 a 2.3 del TP3: limpieza del catálogo, auditoría con expresiones regulares, normalización previa y detección de idioma. <!-- Última modificación: 2026-10-28 -->
+- Se documentan el Paso 1 y los apartados 2.1 a 2.4 del TP3: limpieza del catálogo, auditoría con expresiones regulares, normalización previa, detección de idioma y reconocimiento de entidades. <!-- Última modificación: 2026-10-28 -->
 - El proyecto es un trabajo de análisis en notebooks; esta entrega no agrega backend, API ni pantallas de interfaz. <!-- Última modificación: 2026-10-27 -->
 ## Feature: carga y revisión del catálogo <!-- Última modificación: 2026-10-27 -->
 - Nombre: Paso 1, cargar y revisar libros. <!-- Última modificación: 2026-10-27 -->
@@ -9,7 +9,7 @@
 - Propósito: preparar el catálogo para las consignas posteriores, conservando los datos originales salvo los registros eliminados por las reglas exactas indicadas aquí. <!-- Última modificación: 2026-10-27 -->
 - Información mostrada: conteos de limpieza, grupos de sinopsis repetidas, registros disponibles y pares candidatos con títulos, autores compartidos y métricas de similitud. <!-- Última modificación: 2026-10-27 -->
 - Acciones e interacciones: ejecutar la instalación de dependencias, cargar el archivo, inspeccionar los resultados y revisar manualmente cada candidato numerado. <!-- Última modificación: 2026-10-27 -->
-- Navegación relacionada: el Paso 1 y los apartados 2.1, 2.2 y 2.3 del Paso 2 aparecen en orden; los apartados 2.4 a 2.7 todavía no forman parte de esta implementación. <!-- Última modificación: 2026-10-28 -->
+- Navegación relacionada: el Paso 1 y los apartados 2.1 a 2.4 del Paso 2 aparecen en orden; los apartados 2.5 a 2.7 todavía no forman parte de esta implementación. <!-- Última modificación: 2026-10-28 -->
 - Permisos: no hay autenticación ni permisos de aplicación; la persona que ejecuta Jupyter debe poder leer el archivo de entrada local. <!-- Última modificación: 2026-10-27 -->
 - Carga: la celda busca `data/catalogo_tp3.jsonl` desde la raíz o `../data/catalogo_tp3.jsonl` desde `notebooks/`; también acepta las rutas hermanas originales y un archivo cargado en Colab. <!-- Última modificación: 2026-10-27 -->
 - Vacío: si no hay pares que superen los filtros, la tabla de candidatos queda vacía; los ejemplos de separación requieren que sus libros estén presentes en el catálogo. <!-- Última modificación: 2026-10-27 -->
@@ -35,7 +35,7 @@
 - Propósito: recuperar señales de URL disimuladas mediante normalización y comparar sus resultados con las regex aplicadas al texto original. <!-- Última modificación: 2026-10-27 -->
 - Información mostrada: precisión, recall y libros marcados por URL, correo, teléfono y combinación, en las versiones original y normalizada; falsos positivos de prueba; dos enlaces recuperados en desarrollo; un dominio con homógrafos que sigue sin detectar; y sinopsis limpias que contienen caracteres invisibles. <!-- Última modificación: 2026-10-27 -->
 - Acciones e interacciones: ejecutar las celdas; no requiere ingresar datos ni aprobar decisiones. <!-- Última modificación: 2026-10-27 -->
-- Navegación relacionada: reutiliza `muestra`, `desarrollo` y `prueba` del Paso 2.1; el apartado 2.3 continúa con la detección de idioma. <!-- Última modificación: 2026-10-28 -->
+- Navegación relacionada: reutiliza `muestra`, `desarrollo` y `prueba` del Paso 2.1; los apartados 2.3 y 2.4 continúan con idioma y reconocimiento de entidades. <!-- Última modificación: 2026-10-28 -->
 - Permisos y carga: no hay autenticación; se usa `data/muestra_etiquetada.csv` y la misma partición fija por libro, 70 % desarrollo y 30 % prueba, con `random_state=42` y estratificación por `contaminado`. <!-- Última modificación: 2026-10-27 -->
 - Comportamiento: `normalizar(texto)` devuelve una copia en minúsculas con NFKD, sin combinantes ni caracteres de categoría `Cf`; convierte los homógrafos cirílicos `е` y `а` observados en desarrollo, reemplaza `[.]`, `punto` y `barra`, compacta `h t t p s` y `w w w`, y normaliza espacios alrededor de signos. Conserva las sinopsis originales. <!-- Última modificación: 2026-10-27 -->
 - Evaluación: las mismas regex de Paso 2.1 se aplican al original y a la copia normalizada; las métricas usan únicamente la partición de prueba. Los ejemplos cualitativos se seleccionan de desarrollo. <!-- Última modificación: 2026-10-27 -->
@@ -50,7 +50,7 @@
 - Propósito: mostrar que el idioma principal de una sinopsis completa puede ocultar una oración insertada en otro idioma, y medir la detección por oración. <!-- Última modificación: 2026-10-28 -->
 - Información mostrada: distribución del idioma principal en desarrollo, comparación de mínimos de palabras y probabilidades, precisión, recall, libros marcados, oraciones detectadas y falsos positivos. <!-- Última modificación: 2026-10-28 -->
 - Acciones e interacciones: ejecutar las celdas en orden; `langdetect` detecta el idioma sin pedir entrada ni modificar la sinopsis. <!-- Última modificación: 2026-10-28 -->
-- Navegación relacionada: reutiliza la partición 70/30 del apartado 2.1; desarrollo selecciona parámetros y prueba mide el detector después de fijarlos. <!-- Última modificación: 2026-10-28 -->
+- Navegación relacionada: reutiliza la partición 70/30 del apartado 2.1; desarrollo selecciona parámetros y prueba mide el detector después de fijarlos. El apartado 2.4 analiza entidades solo en desarrollo. <!-- Última modificación: 2026-10-28 -->
 - Permisos y carga: no hay autenticación; el apartado lee `data/muestra_etiquetada.csv` y requiere la dependencia `langdetect` instalada desde `requirements.txt`. <!-- Última modificación: 2026-10-28 -->
 - Comportamiento: usa `detect_langs` con semilla 42, separa oraciones con el patrón de la guía y exige al menos 10 secuencias de letras (no cuenta números como palabras) y probabilidad mínima 0,90 para marcar una oración cuyo idioma principal no sea español. <!-- Última modificación: 2026-10-28 -->
 - Selección de parámetros: se comparan mínimos de 5, 7, 10, 12 y 15 palabras con probabilidades 0,90 y 0,99 solo en las 350 filas de desarrollo; las etiquetas de prueba no intervienen en esa selección. <!-- Última modificación: 2026-10-28 -->
@@ -59,6 +59,21 @@
 - Resultados de prueba: la detección de sinopsis completas marcó 0 libros (precisión y recall 0,00); la detección por oración marcó 9 (precisión 0,89 y recall 0,27). Hubo 1 libro limpio marcado; se muestra su oración junto con las candidatas de libros contaminados. <!-- Última modificación: 2026-10-28 -->
 - Vacío y error: si `langdetect` no devuelve un idioma para un texto, se conserva como “sin detección” y no activa la marca; si falta la dependencia o el CSV, Jupyter muestra el error y detiene la ejecución. <!-- Última modificación: 2026-10-28 -->
 - Backend e integraciones: no hay backend, API ni servicios externos; la ejecución es local y no escribe archivos. <!-- Última modificación: 2026-10-28 -->
+## Feature: reconocimiento de entidades en fragmentos (Paso 2.4) <!-- Última modificación: 2026-10-28 -->
+- Nombre y acceso: Paso 2, apartado 2.4; ejecutar las celdas de NER al final de `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb`. <!-- Última modificación: 2026-10-28 -->
+- Pantalla: no tiene interfaz propia; las tablas, los ejemplos y la interpretación aparecen en celdas del notebook. <!-- Última modificación: 2026-10-28 -->
+- Propósito: comparar entidades nombradas detectadas en oraciones de fragmentos contaminados con entidades de una cantidad similar de oraciones limpias, y discutir si ayudan a detectar o explicar la contaminación. <!-- Última modificación: 2026-10-28 -->
+- Información mostrada: cantidad de oraciones por grupo, proporción con entidades, entidades y etiquetas reconocidas, y entidades que aparecen en los fragmentos pero no en la muestra de sinopsis limpias. <!-- Última modificación: 2026-10-28 -->
+- Acciones e interacciones: ejecutar las celdas en orden; no se ingresan datos ni se modifican registros. spaCy aplica el modelo preentrenado `es_core_news_lg` a cada oración. <!-- Última modificación: 2026-10-28 -->
+- Navegación relacionada: reutiliza `desarrollo` y la separación de oraciones del apartado 2.3; compara las oraciones del campo `fragmento` de libros contaminados con oraciones de sinopsis limpias. No utiliza el texto ni las etiquetas de prueba. <!-- Última modificación: 2026-10-28 -->
+- Permisos y carga: no hay autenticación; lee `data/muestra_etiquetada.csv` y requiere spaCy más el modelo `es_core_news_lg`, descargable con `python -m spacy download es_core_news_lg`. <!-- Última modificación: 2026-10-28 -->
+- Comportamiento: separa las oraciones con el patrón de la guía y conserva segmentos de al menos 15 caracteres; compara todas las oraciones elegibles de fragmentos contaminados en desarrollo con la misma cantidad de oraciones limpias únicas, elegidas con `random_state=42`. Las entidades se comparan ignorando mayúsculas y conservando su etiqueta. <!-- Última modificación: 2026-10-28 -->
+- Evaluación e interpretación: es una comparación descriptiva de entidades; no entrena ni mide un clasificador NER. La presencia de entidades no se usa por sí sola para eliminar o marcar libros. <!-- Última modificación: 2026-10-28 -->
+- Resultados observados en desarrollo: spaCy detectó entidades en 51 de 88 oraciones insertadas (58,0 %) y 36 de 88 limpias (40,9 %); reconoció 39 entidades distintas en fragmentos y 54 en sinopsis limpias. En la muestra comparada no hubo coincidencias exactas de entidad y etiqueta; aparecen nombres promocionales y mensajes de descarga, junto con etiquetas dudosas. <!-- Última modificación: 2026-10-28 -->
+- Respuesta del apartado: NER aporta contexto para explicar señales como nombres de sitios, formatos y texto promocional; su presencia no se toma como detector independiente, pues 36 oraciones limpias también tuvieron entidades y el modelo español puede omitir o clasificar mal. <!-- Última modificación: 2026-10-28 -->
+- Limitaciones: Unidad 3 advierte que el modelo en español puede omitir entidades y producir falsas detecciones. Los resultados dependen de las oraciones muestreadas y no demuestran que una entidad sea exclusiva de la contaminación en todo el catálogo. <!-- Última modificación: 2026-10-28 -->
+- Vacío y error: si no se encuentran oraciones limpias suficientes, el muestreo muestra un error de pandas; si falta el modelo, spaCy muestra el error de carga y se informa el comando de instalación en el README. <!-- Última modificación: 2026-10-28 -->
+- Backend e integraciones: no hay backend, API ni servicios externos durante el análisis; spaCy se ejecuta localmente y no guarda los resultados fuera del notebook. <!-- Última modificación: 2026-10-28 -->
 ## Datos y reglas implementadas <!-- Última modificación: 2026-10-27 -->
 - Entrada: `data/catalogo_tp3.jsonl`, versionado en el repositorio; el notebook selecciona `slug`, `title`, `authors` y `synopsis`. <!-- Última modificación: 2026-10-27 -->
 - Datos de apoyo: `data/muestra_etiquetada.csv`, `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` quedan disponibles para las consignas posteriores del TP3. <!-- Última modificación: 2026-10-27 -->
@@ -73,10 +88,11 @@
 - El candidato 7 se fusiona: comparte autor y Jaccard de sinopsis 1,00, es decir, el mismo conjunto de palabras tras convertirlas a minúsculas; se conserva la primera ficha del catálogo aunque la otra especifique Granada. <!-- Última modificación: 2026-10-27 -->
 - El apartado 2.2 del Paso 2 conserva las sinopsis originales, normaliza una copia para buscar señales disimuladas y mide las mismas regex sobre la partición fija de prueba. <!-- Última modificación: 2026-10-27 -->
 - El apartado 2.3 del Paso 2 usa `langdetect` para comparar la detección en sinopsis completas y oraciones; los parámetros se eligen en desarrollo y luego se miden sobre prueba. <!-- Última modificación: 2026-10-28 -->
+- El apartado 2.4 compara entidades de fragmentos contaminados y oraciones limpias únicamente en desarrollo, mediante `es_core_news_lg`; no cambia las etiquetas ni el catálogo. <!-- Última modificación: 2026-10-28 -->
 - El notebook presenta además dos pares separados por representar volúmenes o contenidos distintos y muestra cinco filas de ejemplo del catálogo final. <!-- Última modificación: 2026-10-27 -->
 - En la corrida final se quitaron 1 sinopsis vacía, 0 slugs duplicados, 98 sinopsis exactas repetidas y 5 fichas por fusión aprobada; quedaron 8.643 libros. <!-- Última modificación: 2026-10-27 -->
 ## Operación y despliegue <!-- Última modificación: 2026-10-27 -->
-- Dependencias: instalar las incluidas en `requirements.txt`, entre ellas `python-Levenshtein`, `scikit-learn` y `langdetect`, y abrir el notebook con Jupyter. <!-- Última modificación: 2026-10-28 -->
-- Persistencia: los pasos 1, 2.1, 2.2 y 2.3 muestran resultados dentro del notebook y no escriben cambios en el catálogo ni exportan sospechosos. <!-- Última modificación: 2026-10-28 -->
+- Dependencias: instalar las incluidas en `requirements.txt`, entre ellas `python-Levenshtein`, `scikit-learn`, `langdetect` y spaCy; para el Paso 2.4 descargar `es_core_news_lg` con `python -m spacy download es_core_news_lg`. Abrir el notebook con Jupyter. <!-- Última modificación: 2026-10-28 -->
+- Persistencia: los pasos 1 y 2.1 a 2.4 muestran resultados dentro del notebook y no escriben cambios en el catálogo ni exportan sospechosos. <!-- Última modificación: 2026-10-28 -->
 - Seguridad e integraciones: no se envían datos a servicios externos ni se agregan credenciales. <!-- Última modificación: 2026-10-27 -->
 - Despliegue: no aplica; el notebook se ejecuta localmente para la entrega académica. <!-- Última modificación: 2026-10-27 -->
