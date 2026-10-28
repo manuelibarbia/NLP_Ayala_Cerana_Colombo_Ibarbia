@@ -10,3 +10,4 @@ jupyterlab>=4.0
 gdown>=5.2
 matplotlib>=3.10
 python-Levenshtein>=0.27
+langdetect>=1.0.9

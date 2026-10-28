@@ -62,7 +62,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-`requirements.txt` es la lista completa y compartida: incluye JupyterLab, pandas, NumPy, NLTK, Gensim, scikit-learn, sentence-transformers, matplotlib, gdown, python-Levenshtein, Playwright y Beautiful Soup.
+`requirements.txt` es la lista completa y compartida: incluye JupyterLab, pandas, NumPy, NLTK, Gensim, scikit-learn, sentence-transformers, matplotlib, gdown, python-Levenshtein, langdetect, Playwright y Beautiful Soup.
 
 Dependencias principales por trabajo (todas se instalan con el mismo `requirements.txt`):
 
@@ -70,7 +70,7 @@ Dependencias principales por trabajo (todas se instalan con el mismo `requiremen
 | --- | --- |
 | TP1 | pandas, NLTK, Gensim, sentence-transformers y scikit-learn |
 | TP2 | pandas, NumPy, NLTK, Gensim, sentence-transformers, scikit-learn, matplotlib y gdown |
-| TP3, Paso 1, Paso 2.1 y Paso 2.2 | pandas, python-Levenshtein y scikit-learn |
+| TP3, Paso 1 y apartados 2.1 a 2.3 | pandas, python-Levenshtein, scikit-learn y langdetect |
 | `src/scraper.py` | Playwright y Beautiful Soup |
 
 ## Ejecutar los trabajos prácticos
@@ -99,7 +99,7 @@ Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recurs
 python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La versión incluida implementa el Paso 1 y los apartados 2.1 y 2.2 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.3 a 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
+La versión incluida implementa el Paso 1 y los apartados 2.1, 2.2 y 2.3 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.4 a 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
 
 ## Entregables existentes
 
