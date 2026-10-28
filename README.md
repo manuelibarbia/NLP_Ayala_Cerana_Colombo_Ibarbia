@@ -70,7 +70,7 @@ Dependencias principales por trabajo (todas se instalan con el mismo `requiremen
 | --- | --- |
 | TP1 | pandas, NLTK, Gensim, sentence-transformers y scikit-learn |
 | TP2 | pandas, NumPy, NLTK, Gensim, sentence-transformers, scikit-learn, matplotlib y gdown |
-| TP3, Paso 1 y apartados 2.1 a 2.4 | pandas, python-Levenshtein, scikit-learn, langdetect y spaCy |
+| TP3, Paso 1 y apartados 2.1 a 2.5 | pandas, python-Levenshtein, scikit-learn, langdetect, spaCy y sentence-transformers |
 | `src/scraper.py` | Playwright y Beautiful Soup |
 
 Para el apartado 2.4 del TP3, instala además el modelo de español de spaCy una vez:
@@ -78,6 +78,8 @@ Para el apartado 2.4 del TP3, instala además el modelo de español de spaCy una
 ```bash
 python -m spacy download es_core_news_lg
 ```
+
+El apartado 2.5 usa el modelo multilingüe `distiluse-base-multilingual-cased-v1`; sentence-transformers lo descarga al cargarlo por primera vez, por lo que esa ejecución requiere conexión a Internet.
 
 ## Ejecutar los trabajos prácticos
 
@@ -105,7 +107,7 @@ Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recurs
 python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.4 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.5 a 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
+La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.5 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. El apartado 2.5 compara clasificadores de oraciones con TF-IDF y embeddings. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. Los apartados 2.6 y 2.7 siguen pendientes. El enunciado está en `docs/TP3/`.
 
 ## Entregables existentes
 
