@@ -8,10 +8,12 @@ Repositorio del grupo para los trabajos prácticos de Procesamiento del Lenguaje
 .
 ├── data/
 │   ├── catalogo_tp3.jsonl
+│   ├── catalogo_limpio.csv
 │   ├── ejemplo_preferencias.csv
 │   ├── ejemplo_sospechosos.csv
 │   ├── libros.csv
-│   └── muestra_etiquetada.csv
+│   ├── muestra_etiquetada.csv
+│   └── sospechosos.csv
 ├── docs/
 │   ├── TP3/
 │   │   ├── TP3_Recomendador_personalizado_de_libros.docx
@@ -70,7 +72,7 @@ Dependencias principales por trabajo (todas se instalan con el mismo `requiremen
 | --- | --- |
 | TP1 | pandas, NLTK, Gensim, sentence-transformers y scikit-learn |
 | TP2 | pandas, NumPy, NLTK, Gensim, sentence-transformers, scikit-learn, matplotlib y gdown |
-| TP3, Paso 1 y apartados 2.1 a 2.6 | pandas, python-Levenshtein, scikit-learn, langdetect, spaCy y sentence-transformers |
+| TP3, Paso 1 y apartados 2.1 a 2.7 | pandas, python-Levenshtein, scikit-learn, langdetect, spaCy y sentence-transformers |
 | `src/scraper.py` | Playwright y Beautiful Soup |
 
 Para el apartado 2.4 del TP3, instala además el modelo de español de spaCy una vez:
@@ -107,7 +109,7 @@ Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recurs
 python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.6 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. El apartado 2.5 compara clasificadores de oraciones con TF-IDF y embeddings. El apartado 2.6 revisa vecinos de sinopsis con TF-IDF, coseno y Jaccard para encontrar copias probables entre autores distintos. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. El apartado 2.7 sigue pendiente. El enunciado está en `docs/TP3/`.
+La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.7 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. El apartado 2.5 compara clasificadores de oraciones con TF-IDF y embeddings. El apartado 2.6 revisa vecinos de sinopsis con TF-IDF, coseno y Jaccard para encontrar copias probables entre autores distintos. El apartado 2.7 compara y combina los detectores y genera `data/sospechosos.csv` y `data/catalogo_limpio.csv`. En la prueba de 150 libros, la combinación alcanzó precisión 0,97 y recall 0,93, con un falso positivo. Sobre los 8.643 libros del catálogo final, marcó 410 y dejó 8.233. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. El enunciado está en `docs/TP3/`.
 
 ## Entregables existentes
 
