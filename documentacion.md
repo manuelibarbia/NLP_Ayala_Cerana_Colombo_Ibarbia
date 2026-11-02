@@ -124,6 +124,7 @@
 ## Feature: registro de preferencias (Paso 3) <!-- Última modificación: 2026-11-02 -->
 - Nombre y acceso: Paso 3; ejecutar las celdas finales de `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb` después del Paso 2.7. <!-- Última modificación: 2026-11-02 -->
 - Propósito: registrar si a una persona del grupo le interesaría leer cada libro, para obtener las valoraciones que usarán los pasos siguientes. <!-- Última modificación: 2026-11-02 -->
+- Lector de referencia: Juan Manuel Ayala realizó todas las valoraciones, antes de ver cualquier predicción. <!-- Última modificación: 2026-11-02 -->
 - Pantalla: no tiene interfaz propia; la planilla se completa fuera del notebook y los conteos de validación se muestran en celdas. <!-- Última modificación: 2026-11-02 -->
 - Orden de lectura: se mezcla `data/catalogo_limpio.csv` una sola vez con `sample(frac=1, random_state=42)`. Ese orden reproducible se conserva para todos los lotes y posiciones. <!-- Última modificación: 2026-11-02 -->
 - Planilla: `data/preferencias.csv` contiene las primeras 150 posiciones del orden, con `slug`, `title`, `synopsis` e `interes`. No se versiona un archivo con las 8.233 posiciones para no inflar el repositorio; el orden se reconstruye con la misma semilla. <!-- Última modificación: 2026-11-02 -->
