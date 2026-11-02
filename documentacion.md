@@ -1,7 +1,7 @@
 # Documentación del proyecto <!-- Última modificación: 2026-10-27 -->
 <!-- Última modificación: 2026-10-27 -->
 ## Alcance de esta entrega <!-- Última modificación: 2026-10-27 -->
-- Se documentan el Paso 1, los apartados 2.1 a 2.7 y los pasos 3 y 4 del TP3: limpieza del catálogo, detectores de contaminación, revisión de vecinos, medición y combinación de señales, exportación del catálogo limpio, registro de preferencias de un lector y separación en entrenamiento y prueba. <!-- Última modificación: 2026-11-02 -->
+- Se documentan el Paso 1, los apartados 2.1 a 2.7 y los pasos 3 a 6 del TP3: limpieza del catálogo, detectores de contaminación, revisión de vecinos, medición y combinación de señales, exportación del catálogo limpio, registro de preferencias de un lector, separación en entrenamiento y prueba, entrenamiento de dos clasificadores de preferencias y su evaluación. <!-- Última modificación: 2026-11-02 -->
 - El proyecto es un trabajo de análisis en notebooks; esta entrega no agrega backend, API ni pantallas de interfaz. <!-- Última modificación: 2026-10-27 -->
 ## Feature: carga y revisión del catálogo <!-- Última modificación: 2026-10-27 -->
 - Nombre: Paso 1, cargar y revisar libros. <!-- Última modificación: 2026-10-27 -->
@@ -149,6 +149,27 @@
 - Límites: con 30 libros de prueba, las métricas tienen alta variabilidad; la división fija permite comparar modelos, pero no garantiza el desempeño sobre el catálogo completo. Si se agregan o corrigen valoraciones, hay que volver a ejecutar el Paso 4 para actualizar `conjunto`. <!-- Última modificación: 2026-11-02 -->
 - Vacío y error: si hay menos de 100 valoraciones válidas o menos de 20 por clase, la celda detiene la ejecución; si aparecen valores distintos de `0`, `1` o vacío, muestra las filas afectadas y también se detiene. <!-- Última modificación: 2026-11-02 -->
 - Backend e integraciones: no hay backend, API ni servicios externos; la división se calcula y se guarda localmente. <!-- Última modificación: 2026-11-02 -->
+## Feature: clasificadores de preferencias (Paso 5) <!-- Última modificación: 2026-11-02 -->
+- Nombre y acceso: Paso 5; ejecutar las celdas de `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb` después del Paso 4. <!-- Última modificación: 2026-11-02 -->
+- Propósito: aprender `interes` a partir de la sinopsis con dos representaciones distintas del texto, para compararlas con la misma división y la misma configuración. <!-- Última modificación: 2026-11-02 -->
+- Pantalla: no tiene interfaz propia; el notebook muestra el tamaño de las matrices y las predicciones de los 30 libros de prueba. <!-- Última modificación: 2026-11-02 -->
+- Datos de entrada: `entrenamiento_preferencias` para ajustar y `prueba_preferencias` para predecir, generados por el Paso 4. <!-- Última modificación: 2026-11-02 -->
+- Configuración fija: `LogisticRegression(C=1, max_iter=1000, class_weight="balanced")` en los dos modelos; no se buscan hiperparámetros. <!-- Última modificación: 2026-11-02 -->
+- Modelo A: `TfidfVectorizer` con su configuración por defecto, ajustado con `fit_transform` solo sobre entrenamiento y aplicado a prueba con `transform`. Matrices de 116 y 30 filas. <!-- Última modificación: 2026-11-02 -->
+- Modelo B: embeddings de `distiluse-base-multilingual-cased-v1` sobre el texto natural de la sinopsis; reutiliza el modelo cargado en el apartado 2.5 si está disponible. El modelo de embeddings queda fijo y solo se entrena la regresión. Matrices de 116 × 512 y 30 × 512. <!-- Última modificación: 2026-11-02 -->
+- Uso posterior: el Paso 6 evalúa `pred_a` y `pred_b`; los Pasos 7 y 8 reutilizan `modelo_a`, `modelo_b` y `modelo_embeddings` sin volver a entrenarlos. <!-- Última modificación: 2026-11-02 -->
+- Límites: con 116 ejemplos de entrenamiento los modelos aprenden pocas regularidades; el modelo de embeddings lee hasta 128 tokens, por lo que en sinopsis largas representa sobre todo el comienzo. <!-- Última modificación: 2026-11-02 -->
+- Persistencia e integraciones: no escribe archivos; el modelo multilingüe se descarga la primera vez si no está en caché. <!-- Última modificación: 2026-11-02 -->
+## Feature: evaluación de las predicciones (Paso 6) <!-- Última modificación: 2026-11-02 -->
+- Nombre y acceso: Paso 6; ejecutar las celdas de `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb` después del Paso 5. <!-- Última modificación: 2026-11-02 -->
+- Propósito: comparar las predicciones con las valoraciones reales de prueba y estimar cuánto varían las métricas. <!-- Última modificación: 2026-11-02 -->
+- Pantalla: no tiene interfaz propia; muestra `classification_report`, matriz de confusión, una tabla de métricas por modelo, la validación cruzada y el detalle de los 30 libros de prueba con sus probabilidades. <!-- Última modificación: 2026-11-02 -->
+- Resultado en prueba (clase 1): TF-IDF obtuvo precisión 0,42, recall 0,50 y F1 0,45 (18 aciertos y 12 errores); embeddings obtuvo precisión 0,36, recall 0,50 y F1 0,42 (16 aciertos y 14 errores). La proporción de positivos en prueba es 0,33. <!-- Última modificación: 2026-11-02 -->
+- Validación cruzada: `RepeatedStratifiedKFold(n_splits=5, n_repeats=10, random_state=42)` sobre entrenamiento; el modelo A usa un `Pipeline` para ajustar TF-IDF dentro de cada partición. F1 medio de la clase 1: embeddings 0,409 (desvío 0,134) y TF-IDF 0,325 (desvío 0,187). No se usa para elegir parámetros. <!-- Última modificación: 2026-11-02 -->
+- Ejemplos comentados: un acierto («Cruzando el Umbral») y un falso positivo («Einstein versus Predator») de los dos modelos, ambos con probabilidades cercanas a 0,5. <!-- Última modificación: 2026-11-02 -->
+- Uso posterior: `proba_a` y `proba_b` contienen la probabilidad de `interes=1` en prueba y las usa el Paso 7. <!-- Última modificación: 2026-11-02 -->
+- Límites: con 30 libros de prueba un libro mueve mucho las métricas; el desvío de la validación cruzada es mayor que la diferencia entre modelos en prueba. No se cambian etiquetas ni se ajustan los modelos por estos resultados. <!-- Última modificación: 2026-11-02 -->
+- Persistencia e integraciones: no escribe archivos ni usa servicios externos. <!-- Última modificación: 2026-11-02 -->
 ## Datos y reglas implementadas <!-- Última modificación: 2026-10-27 -->
 - Entrada: `data/catalogo_tp3.jsonl`, versionado en el repositorio; el notebook selecciona `slug`, `title`, `authors` y `synopsis`. <!-- Última modificación: 2026-10-27 -->
 - Datos de apoyo: `data/muestra_etiquetada.csv`, `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` quedan disponibles para las consignas posteriores del TP3; `data/preferencias.csv` es la planilla real del Paso 3 y conserva la columna `conjunto` que agrega el Paso 4. <!-- Última modificación: 2026-11-02 -->
@@ -168,10 +189,11 @@
 - El apartado 2.6 calcula el vecino más próximo de cada sinopsis con TF-IDF y coseno, filtra autores identificables distintos y emplea Jaccard para apoyar la revisión manual; no altera el catálogo. <!-- Última modificación: 2026-10-28 -->
 - El apartado 2.7 combina las marcas binarias por OR, mide precisión y recall en la partición de prueba fija y genera `data/sospechosos.csv` y `data/catalogo_limpio.csv`. <!-- Última modificación: 2026-10-29 -->
 - El Paso 4 usa solo las valoraciones `0`/`1` y aplica una división estratificada 80/20 con `random_state=42`; guarda `entrenamiento` o `prueba` en la columna `conjunto` de `data/preferencias.csv`. <!-- Última modificación: 2026-11-02 -->
+- El Paso 5 entrena `LogisticRegression(C=1, max_iter=1000, class_weight="balanced")` con TF-IDF y con embeddings sobre la misma división; el Paso 6 mide precisión, recall y F1 de la clase 1 en prueba y la variabilidad con `RepeatedStratifiedKFold(n_splits=5, n_repeats=10, random_state=42)` sobre entrenamiento. <!-- Última modificación: 2026-11-02 -->
 - El notebook presenta además dos pares separados por representar volúmenes o contenidos distintos y muestra cinco filas de ejemplo del catálogo final. <!-- Última modificación: 2026-10-27 -->
 - En la corrida final se quitaron 1 sinopsis vacía, 0 slugs duplicados, 98 sinopsis exactas repetidas y 5 fichas por fusión aprobada; quedaron 8.643 libros. <!-- Última modificación: 2026-10-27 -->
 ## Operación y despliegue <!-- Última modificación: 2026-10-27 -->
 - Dependencias: instalar las incluidas en `requirements.txt`, entre ellas `python-Levenshtein`, `scikit-learn`, `langdetect`, spaCy y sentence-transformers; para el Paso 2.4 descargar `es_core_news_lg` con `python -m spacy download es_core_news_lg`. El Paso 2.5 descarga el modelo multilingüe al cargarlo por primera vez. Abrir el notebook con Jupyter. El Paso 2.6 usa scikit-learn ya incluido; el 2.7 reutiliza esas dependencias y el modelo ya cargado por 2.5. <!-- Última modificación: 2026-10-29 -->
-- Persistencia: los pasos 1 y 2.1 a 2.6 muestran resultados en el notebook sin modificar el catálogo; el 2.7 escribe los dos CSV de salida en `data/`; el Paso 3 escribe `data/preferencias.csv` y el Paso 4 agrega su columna `conjunto`. <!-- Última modificación: 2026-11-02 -->
+- Persistencia: los pasos 1 y 2.1 a 2.6 muestran resultados en el notebook sin modificar el catálogo; el 2.7 escribe los dos CSV de salida en `data/`; el Paso 3 escribe `data/preferencias.csv` y el Paso 4 agrega su columna `conjunto`; los pasos 5 y 6 no escriben archivos. <!-- Última modificación: 2026-11-02 -->
 - Seguridad e integraciones: no se envían datos a servicios externos ni se agregan credenciales. <!-- Última modificación: 2026-10-27 -->
 - Despliegue: no aplica; el notebook se ejecuta localmente para la entrega académica. <!-- Última modificación: 2026-10-27 -->
