@@ -13,6 +13,7 @@ Repositorio del grupo para los trabajos prácticos de Procesamiento del Lenguaje
 │   ├── ejemplo_sospechosos.csv
 │   ├── libros.csv
 │   ├── muestra_etiquetada.csv
+│   ├── preferencias.csv
 │   └── sospechosos.csv
 ├── docs/
 │   ├── TP3/
@@ -109,7 +110,7 @@ Usa `data/libros.csv` y `queries.json`. En la primera ejecución descarga recurs
 python -m jupyter lab notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb
 ```
 
-La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.7 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. El apartado 2.5 compara clasificadores de oraciones con TF-IDF y embeddings. El apartado 2.6 revisa vecinos de sinopsis con TF-IDF, coseno y Jaccard para encontrar copias probables entre autores distintos. El apartado 2.7 compara y combina los detectores y genera `data/sospechosos.csv` y `data/catalogo_limpio.csv`. En la prueba de 150 libros, la combinación alcanzó precisión 0,97 y recall 0,93, con un falso positivo. Sobre los 8.643 libros del catálogo final, marcó 410 y dejó 8.233. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. El enunciado está en `docs/TP3/`.
+La versión incluida implementa el Paso 1 y los apartados 2.1 a 2.7 del Paso 2; lee `data/catalogo_tp3.jsonl` y `data/muestra_etiquetada.csv`. El apartado 2.3 usa `langdetect` para detectar mensajes en otro idioma dentro de las sinopsis. El apartado 2.4 usa spaCy con `es_core_news_lg` para comparar entidades de fragmentos contaminados con una cantidad similar de oraciones limpias. El apartado 2.5 compara clasificadores de oraciones con TF-IDF y embeddings. El apartado 2.6 revisa vecinos de sinopsis con TF-IDF, coseno y Jaccard para encontrar copias probables entre autores distintos. El apartado 2.7 compara y combina los detectores y genera `data/sospechosos.csv` y `data/catalogo_limpio.csv`. En la prueba de 150 libros, la combinación alcanzó precisión 0,97 y recall 0,93, con un falso positivo. Sobre los 8.643 libros del catálogo final, marcó 410 y dejó 8.233. También están versionados `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` para las consignas posteriores. El Paso 3 usa `data/preferencias.csv`, con 150 libros en un único orden reproducible (`random_state=42`). La planilla completada tiene 146 respuestas válidas (95 «no» y 51 «sí») y 4 libros sin decidir, con los mínimos de 100 respuestas y 20 por clase cumplidos. El enunciado está en `docs/TP3/`.
 
 ## Entregables existentes
 

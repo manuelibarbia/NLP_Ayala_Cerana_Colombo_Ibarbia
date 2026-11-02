@@ -1,7 +1,7 @@
 # Documentación del proyecto <!-- Última modificación: 2026-10-27 -->
 <!-- Última modificación: 2026-10-27 -->
 ## Alcance de esta entrega <!-- Última modificación: 2026-10-27 -->
-- Se documentan el Paso 1 y los apartados 2.1 a 2.7 del TP3: limpieza del catálogo, detectores de contaminación, revisión de vecinos, medición y combinación de señales y exportación del catálogo limpio. <!-- Última modificación: 2026-10-29 -->
+- Se documentan el Paso 1, los apartados 2.1 a 2.7 y el Paso 3 del TP3: limpieza del catálogo, detectores de contaminación, revisión de vecinos, medición y combinación de señales, exportación del catálogo limpio y registro de preferencias de un lector. <!-- Última modificación: 2026-11-02 -->
 - El proyecto es un trabajo de análisis en notebooks; esta entrega no agrega backend, API ni pantallas de interfaz. <!-- Última modificación: 2026-10-27 -->
 ## Feature: carga y revisión del catálogo <!-- Última modificación: 2026-10-27 -->
 - Nombre: Paso 1, cargar y revisar libros. <!-- Última modificación: 2026-10-27 -->
@@ -121,9 +121,24 @@
 - Límites: la combinación OR puede elevar el recall y también los falsos positivos; cada falso positivo se quitaría del catálogo recomendable. La muestra de 150 libros no garantiza el desempeño sobre los 8.643 libros del catálogo final. Las copias de 2.6 provienen de revisión manual y los dos pares no concluyentes no se marcan por esa señal. <!-- Última modificación: 2026-10-29 -->
 - Vacío y error: si ningún detector marca libros, `sospechosos.csv` conserva sus columnas sin filas y `catalogo_limpio.csv` contiene el catálogo completo; si faltan datos, dependencias o el modelo de embeddings, Jupyter muestra el error de ejecución y no completa la exportación. <!-- Última modificación: 2026-10-29 -->
 - Backend e integraciones: no existe backend, API ni servicio externo; los modelos se ejecutan localmente y los CSV se escriben en `data/`. <!-- Última modificación: 2026-10-29 -->
+## Feature: registro de preferencias (Paso 3) <!-- Última modificación: 2026-11-02 -->
+- Nombre y acceso: Paso 3; ejecutar las celdas finales de `notebooks/TP3_ayala_cerana_colombo_ibarbia.ipynb` después del Paso 2.7. <!-- Última modificación: 2026-11-02 -->
+- Propósito: registrar si a una persona del grupo le interesaría leer cada libro, para obtener las valoraciones que usarán los pasos siguientes. <!-- Última modificación: 2026-11-02 -->
+- Pantalla: no tiene interfaz propia; la planilla se completa fuera del notebook y los conteos de validación se muestran en celdas. <!-- Última modificación: 2026-11-02 -->
+- Orden de lectura: se mezcla `data/catalogo_limpio.csv` una sola vez con `sample(frac=1, random_state=42)`. Ese orden reproducible se conserva para todos los lotes y posiciones. <!-- Última modificación: 2026-11-02 -->
+- Planilla: `data/preferencias.csv` contiene las primeras 150 posiciones del orden, con `slug`, `title`, `synopsis` e `interes`. No se versiona un archivo con las 8.233 posiciones para no inflar el repositorio; el orden se reconstruye con la misma semilla. <!-- Última modificación: 2026-11-02 -->
+- Resultado de la planilla completada: 150 filas, 146 respuestas válidas (95 «no» y 51 «sí») y 4 libros sin decidir. Se cumplen los mínimos de 100 respuestas válidas y 20 por clase; los vacíos se conservan como vacíos y no se imputan. <!-- Última modificación: 2026-11-02 -->
+- Valores admitidos: `1` si interesa, `0` si no interesa y vacío si la persona no puede decidir. Los vacíos no se convierten en `0` ni se completan con valores inventados. <!-- Última modificación: 2026-11-02 -->
+- Validación: la celda informa respuestas válidas, sin valorar y el conteo por clase; exige al menos 100 respuestas válidas y 20 de cada clase. También detecta valores distintos de `0`, `1` y vacío, slugs fuera del catálogo limpio, slugs repetidos y filas que no siguen el orden de lectura. <!-- Última modificación: 2026-11-02 -->
+- Lotes adicionales: `agregar_siguiente_lote_preferencias(n=50)` añade las posiciones siguientes del mismo orden sin modificar las filas ya valoradas. Se usa solo si no se alcanzan los mínimos. <!-- Última modificación: 2026-11-02 -->
+- Libro sospechoso no detectado: si el lector encuentra un libro contaminado que el Paso 2 no marcó, deja su `interes` vacío y ejecuta `marcar_sospechoso_manual(slug)`. La función agrega el slug a `data/sospechosos.csv` con motivo `revisión manual` y limpia su valoración en la planilla; no modifica `data/catalogo_limpio.csv`. <!-- Última modificación: 2026-11-02 -->
+- Uso posterior: el Paso 4 solo debe usar las respuestas válidas. El Paso 8 debe excluir los slugs presentes en `preferencias.csv` y en `sospechosos.csv`, incluidos los agregados manualmente. <!-- Última modificación: 2026-11-02 -->
+- Límites: las valoraciones son subjetivas y deben provenir de una misma persona, sin ver predicciones previas. Los 4 libros sin decidir no se usan como ejemplos de entrenamiento ni de prueba. No se pueden obtener métricas de recomendación con valores inventados. <!-- Última modificación: 2026-11-02 -->
+- Vacío y error: si la planilla no existe, la celda la crea con 150 filas vacías; si un valor no es `0`, `1` ni vacío, la validación muestra las filas afectadas y detiene la ejecución. Si falta `data/sospechosos.csv`, `marcar_sospechoso_manual` falla al intentar leerlo. <!-- Última modificación: 2026-11-02 -->
+- Persistencia e integraciones: los cambios se guardan en `data/preferencias.csv` y, para sospechosos manuales, en `data/sospechosos.csv`; no hay backend, API ni servicios externos. <!-- Última modificación: 2026-11-02 -->
 ## Datos y reglas implementadas <!-- Última modificación: 2026-10-27 -->
 - Entrada: `data/catalogo_tp3.jsonl`, versionado en el repositorio; el notebook selecciona `slug`, `title`, `authors` y `synopsis`. <!-- Última modificación: 2026-10-27 -->
-- Datos de apoyo: `data/muestra_etiquetada.csv`, `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` quedan disponibles para las consignas posteriores del TP3. <!-- Última modificación: 2026-10-27 -->
+- Datos de apoyo: `data/muestra_etiquetada.csv`, `data/ejemplo_preferencias.csv` y `data/ejemplo_sospechosos.csv` quedan disponibles para las consignas posteriores del TP3; `data/preferencias.csv` es la planilla real del Paso 3. <!-- Última modificación: 2026-11-02 -->
 - Documentación fuente: el enunciado DOCX y PDF se conserva en `docs/TP3/`; no hace falta para ejecutar los notebooks. <!-- Última modificación: 2026-10-27 -->
 - Se normalizan espacios consecutivos de la sinopsis, sin quitar puntuación ni caracteres. <!-- Última modificación: 2026-10-27 -->
 - Se descartan sinopsis vacías, slugs repetidos y sinopsis idénticas ya normalizadas, conservando el primer registro de cada caso repetido. <!-- Última modificación: 2026-10-27 -->
